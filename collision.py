@@ -9,7 +9,5 @@ def collision(gameObjGroup):
                     collision = pygame.sprite.spritecollideany(mySprite, gameObjGroup[i+1])
                     if collision != None:
                         mySprite.kill()
-                        print("killed")
                         collision.health += 10
-                        print(collision, collision.health)
     killOrganism(gameObjGroup)

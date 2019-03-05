@@ -1,10 +1,8 @@
 import pygame
 import random
+from variables import screenHeight, screenWidth, spriteHeight, spriteWidth, initHealth
 
-spriteWidth = 5
-spriteHeight = 5
-initHealth = 100
-all_sprites_list = pygame.sprite.Group()
+allSpritesList = pygame.sprite.Group()
 
 class Block(pygame.sprite.Sprite):
     # Constructor. Pass in the color of the block,
@@ -26,33 +24,38 @@ class Block(pygame.sprite.Sprite):
 
         self.mask = pygame.mask.from_surface(self.image)
         self.health = initHealth
-    def update(self, screenHeight, screenWidth, group):
-        # random movement
+        self.moveX = True if (random.randint(0,1)==0) else False
+        self.moveY = True if (random.randint(0,1)==0) else False
+
+    def update(self):
+        '''change direction if touched edge
+        kill if health == 0'''
+
         if self.rect.x == screenHeight:
-            self.rect.x -= 1
+            self.moveX = False
         elif self.rect.x == 0:
+            self.moveX = True
+
+        if self.rect.y == screenWidth:
+            self.moveY = False
+        elif self.rect.y == 0:
+            self.moveY = True
+        
+        if self.moveX == True:
             self.rect.x += 1
         else:
-            randomNum = random.randint(0,1)
-            if randomNum == 0:
-                self.rect.x += 1
-            else:
-                self.rect.x -= 1 
-        if self.rect.y == screenHeight:
-            self.rect.y -= 1
-        elif self.rect.y == 0:
+            self.rect.x -= 1
+
+        if self.moveY == True:
             self.rect.y += 1
         else:
-            randomNum = random.randint(0,1)
-            if randomNum == 0:
-                self.rect.y += 1
-            else:
-                self.rect.y -= 1 
+            self.rect.y -= 1
+
         # kill if health == 0
         if self.health == 0:
             self.kill()
 
-def spritePosition(screenHeight, screenWidth, color):
+def spritePosition(color):
     spriteColor = pygame.Color(color[0],color[1],color[2])
     #create new sprite
     block = Block(spriteColor, spriteHeight, spriteWidth)
